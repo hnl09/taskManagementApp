@@ -4,6 +4,7 @@
 /build
 
 # Logs
+firebaseadminsdk.json
 logs
 *.log
 npm-debug.log*
