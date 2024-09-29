@@ -1,6 +1,5 @@
 import { Injectable, OnApplicationBootstrap } from "@nestjs/common";
 import { initializeApp, FirebaseApp } from 'firebase/app';
-import { getAuth } from "firebase/auth";
 import { readFile } from "fs/promises";
 import * as admin from "firebase-admin";
 import * as path from "path";
@@ -36,10 +35,6 @@ export class Firebase implements OnApplicationBootstrap {
 
     client() {
         return clientApp;
-    }
-
-    clientAuth() {
-        return getAuth(clientApp);
     }
 
     admin() {

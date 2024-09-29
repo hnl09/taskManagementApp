@@ -1,26 +1,17 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
 import { Firebase } from "../../config/firebase.setup";
 import * as FirebaseAuth from 'firebase/auth';
-import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword, 
-    signOut, 
-    sendEmailVerification, 
-    sendPasswordResetEmail,
-    updateProfile
-} from "firebase/auth";
-
+import { updateProfile, getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { RegisterUserDto } from "./dto/register-user.dto";
 import { SigninUserDto } from "./dto/signin-user.dto";
 
-
 @Injectable()
 export class AuthService {
-    constructor(private readonly admin: Firebase) {}
+    constructor(private readonly firebase: Firebase) {}
 
     async createUser(userRegisterRequest: RegisterUserDto): Promise<any> {
         const { email, password, firstName, lastName, role } = userRegisterRequest;
-        const admin = this.admin.admin();
+        const admin = this.firebase.admin();
 
         try {
             const userCredential = await FirebaseAuth.createUserWithEmailAndPassword(
@@ -28,6 +19,8 @@ export class AuthService {
                 email,
                 password,
             );
+
+            await FirebaseAuth.sendEmailVerification(userCredential.user);
 
             await updateProfile(userCredential.user, {
                 displayName: `${firstName} ${lastName}`
@@ -39,7 +32,7 @@ export class AuthService {
             let displayName = userCredential.user.displayName;
 
             return { idToken, displayName };
-        }catch (error) {
+        } catch (error) {
             throw new BadRequestException("Error creating user: ", error.message);
         }
     }
@@ -54,9 +47,24 @@ export class AuthService {
               );
               let idToken = await userCredential.user.getIdToken();
           
-              return { idToken };
+              return { idToken, userCredential };
         } catch (error) {
             throw new BadRequestException("Error loggin in", error.message);
+        }
+    }
+
+    async resetPassword(token: string): Promise<any> {
+        const admin = this.firebase.admin();
+        const clientApp = this.firebase.client();
+        const auth = getAuth(clientApp);
+        try {
+            const decodedToken = await admin.auth().verifyIdToken(token);
+            const user = await admin.auth().getUser(decodedToken.uid);
+
+            await sendPasswordResetEmail(auth, user.email);
+            return { message: `Password reset email sent successfully to: ${user.email}` };
+        } catch (error) {
+            throw new BadRequestException("Error reseting password: ", error.message);
         }
     }
 }

@@ -11,11 +11,7 @@ export class RegisterUserDto {
     email: string;
 
     @IsNotEmpty()
-    @MinLength(8)
-    @MaxLength(20)
-    @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,20}$/, {
-        message: "Passowrd is too weak, it must contain at least one uppercase letter, one lowercase letter, one number and one special character",
-    })
+    @MinLength(6)
     password: string;
 
     @IsNotEmpty()
