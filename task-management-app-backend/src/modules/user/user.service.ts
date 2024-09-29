@@ -1,25 +1,62 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
-import { FirebaseAdmin } from "../../config/firebase.setup";
-import { UserDto } from "./dto/user.dto";
+import { Firebase } from "../../config/firebase.setup";
+import * as FirebaseAuth from 'firebase/auth';
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword, 
+    signOut, 
+    sendEmailVerification, 
+    sendPasswordResetEmail,
+    updateProfile
+} from "firebase/auth";
+
+import { RegisterUserDto } from "./dto/register-user.dto";
+import { SigninUserDto } from "./dto/signin-user.dto";
+
 
 @Injectable()
 export class UserService {
-    constructor(private readonly admin: FirebaseAdmin) {}
+    constructor(private readonly admin: Firebase) {}
 
-    async createUser(userRequest: UserDto): Promise<any> {
-        const { email, password, firstName, lastName, role } = userRequest;
-        const app = this.admin.setup();
+    async createUser(userRegisterRequest: RegisterUserDto): Promise<any> {
+        const { email, password, firstName, lastName, role } = userRegisterRequest;
+        const admin = this.admin.admin();
 
         try {
-            const createdUser = await app.auth().createUser({
+            const userCredential = await FirebaseAuth.createUserWithEmailAndPassword(
+                FirebaseAuth.getAuth(),
                 email,
                 password,
-                displayName: `${firstName} ${lastName}`,
+            );
+
+            await updateProfile(userCredential.user, {
+                displayName: `${firstName} ${lastName}`
             });
-            await app.auth().setCustomUserClaims(createdUser.uid, { role });
-            return createdUser;
+
+            await admin.auth().setCustomUserClaims(userCredential.user.uid, { role });
+
+            let idToken = await userCredential.user.getIdToken();
+            let displayName = userCredential.user.displayName;
+
+            return { idToken, displayName };
+        }catch (error) {
+            throw new BadRequestException("Error creating user: ", error.message);
+        }
+    }
+
+    async loginUser(userLoginRequest: SigninUserDto): Promise<any> {
+        const { email, password } = userLoginRequest;
+        try {
+            const userCredential = await FirebaseAuth.signInWithEmailAndPassword(
+                FirebaseAuth.getAuth(),
+                email,
+                password,
+              );
+              let idToken = await userCredential.user.getIdToken();
+          
+              return { idToken };
         } catch (error) {
-            throw new BadRequestException(error.message);
+            throw new BadRequestException("Error loggin in", error.message);
         }
     }
 }

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
+import { Firebase } from './config/firebase.setup';
 
 @Module({
   imports: [
@@ -10,6 +11,6 @@ import { UserModule } from './modules/user/user.module';
     UserModule
   ],
   controllers: [],
-  providers: [],
+  providers: [Firebase],
 })
 export class AppModule {}

@@ -5,7 +5,7 @@ enum Permissions {
     USER = "USER"
 }
 
-export class UserDto {
+export class RegisterUserDto {
     @IsEmail()
     @IsNotEmpty()
     email: string;
