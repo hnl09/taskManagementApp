@@ -4,6 +4,7 @@ import * as FirebaseAuth from 'firebase/auth';
 import { updateProfile, getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { RegisterUserDto } from "./dto/register-user.dto";
 import { SigninUserDto } from "./dto/signin-user.dto";
+import { ResetPasswordDto } from "./dto/reset-password.dto";
 
 @Injectable()
 export class AuthService {
@@ -53,13 +54,13 @@ export class AuthService {
         }
     }
 
-    async resetPassword(token: string): Promise<any> {
+    async resetPassword(resetPasswordRequest: ResetPasswordDto): Promise<any> {
+        const { email } = resetPasswordRequest;
         const admin = this.firebase.admin();
-        const clientApp = this.firebase.client();
-        const auth = getAuth(clientApp);
+        const auth = getAuth();
+
         try {
-            const decodedToken = await admin.auth().verifyIdToken(token);
-            const user = await admin.auth().getUser(decodedToken.uid);
+            const user = await admin.auth().getUserByEmail(email);
 
             await sendPasswordResetEmail(auth, user.email);
             return { message: `Password reset email sent successfully to: ${user.email}` };

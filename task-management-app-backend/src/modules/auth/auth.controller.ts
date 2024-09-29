@@ -3,6 +3,7 @@ import { AuthService } from "./auth.service"
 import { AuthGuard } from '@nestjs/passport';;
 import { RegisterUserDto } from "./dto/register-user.dto";
 import { SigninUserDto } from "./dto/signin-user.dto";
+import { ResetPasswordDto } from "./dto/reset-password.dto";
 import * as FirebaseAuth from 'firebase/auth';
 
 
@@ -21,11 +22,9 @@ export class AuthController {
         return this.AuthService.loginUser(userLoginRequest);
     }
 
-    @UseGuards(AuthGuard('bearer'))
-    @Get('/reset-password')
-    reset(@Headers('authorization') authHeader: string) {
-        const token = authHeader.split(' ')[1];
-        return this.AuthService.resetPassword(token)
+    @Post('/reset-password')
+    reset(@Body() resetPasswordRequest: ResetPasswordDto) {
+        return this.AuthService.resetPassword(resetPasswordRequest)
     }
     
 }
