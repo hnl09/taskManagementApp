@@ -1,11 +1,8 @@
 import { Controller, Get, Post, Body, UseGuards, Headers } from "@nestjs/common";
 import { AuthService } from "./auth.service"
-import { AuthGuard } from '@nestjs/passport';;
 import { RegisterUserDto } from "./dto/register-user.dto";
 import { SigninUserDto } from "./dto/signin-user.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
-import * as FirebaseAuth from 'firebase/auth';
-
 
 
 @Controller("auth")
