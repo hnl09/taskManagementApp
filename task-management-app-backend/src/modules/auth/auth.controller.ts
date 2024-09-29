@@ -1,27 +1,27 @@
 import { Controller, Get, Post, Body, UseGuards } from "@nestjs/common";
-import { UserService } from "./user.service"
+import { AuthService } from "./auth.service"
 import { AuthGuard } from '@nestjs/passport';;
 import { RegisterUserDto } from "./dto/register-user.dto";
 import { SigninUserDto } from "./dto/signin-user.dto";
 
 
-@Controller("user")
-export class UserController {
-    constructor(private readonly userService: UserService) {}
+@Controller("auth")
+export class AuthController {
+    constructor(private readonly AuthService: AuthService) {}
 
     @UseGuards(AuthGuard('bearer'))
     @Get('/test')
     test() {
-        return "Hello from user controller";
+        return "Hello from auth controller";
     }
 
     @Post("/signup")
     signup(@Body() userRegisterRequest: RegisterUserDto) {
-        return this.userService.createUser(userRegisterRequest);
+        return this.AuthService.createUser(userRegisterRequest);
     }
 
     @Post("/signin")
     signin(@Body() userLoginRequest: SigninUserDto) {
-        return this.userService.loginUser(userLoginRequest);
+        return this.AuthService.loginUser(userLoginRequest);
     }
 }

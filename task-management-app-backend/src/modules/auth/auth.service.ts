@@ -15,7 +15,7 @@ import { SigninUserDto } from "./dto/signin-user.dto";
 
 
 @Injectable()
-export class UserService {
+export class AuthService {
     constructor(private readonly admin: Firebase) {}
 
     async createUser(userRegisterRequest: RegisterUserDto): Promise<any> {

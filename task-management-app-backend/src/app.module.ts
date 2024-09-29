@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { Firebase } from './config/firebase.setup';
 
 @Module({
@@ -8,7 +8,7 @@ import { Firebase } from './config/firebase.setup';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    UserModule
+    AuthModule
   ],
   controllers: [],
   providers: [Firebase],
