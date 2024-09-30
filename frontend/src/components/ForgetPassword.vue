@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Navbar />
     <h2>Forget Password</h2>
     <form @submit.prevent="forgetPassword">
       <input v-model="email" type="email" placeholder="Email" required />
@@ -10,8 +11,14 @@
 
 <script>
 import axios from 'axios';
+import Navbar from '@/components/Navbar.vue';
+
 
 export default {
+  name: 'ForgetPassword',
+  components: {
+    Navbar,
+  },
   data() {
     return {
       email: '',

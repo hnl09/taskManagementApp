@@ -1,17 +1,22 @@
 <template>
   <div>
-    <Navbar />
+    <nav>
+      <router-link to="/">Home</router-link>
+      <template v-if="!displayName">
+        <router-link to="/login"> | Login</router-link>
+        <router-link to="/register"> | Register</router-link>
+        <router-link to="/forget-password"> | Forget Password</router-link>
+      </template>
+      <p v-if="displayName">Welcome, {{ displayName }}</p>
+      <p v-else>Welcome, guest! Create your account to be able to create your tasks.</p>
+      <button v-if="displayName" @click="logout">Logout</button>
+    </nav>
   </div>
 </template>
 
 <script>
-import Navbar from '@/components/Navbar.vue';
-
 export default {
-  name: 'HomeView',
-  components: {
-    Navbar,
-  },
+  name: 'Navbar',
   data() {
     return {
       displayName: null,
@@ -40,3 +45,6 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+</style>

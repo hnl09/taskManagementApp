@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Navbar />
     <h2>Register</h2>
     <form @submit.prevent="register">
       <input v-model="email" type="email" placeholder="Email" required />
@@ -11,8 +12,13 @@
 
 <script>
 import axios from 'axios';
+import Navbar from '@/components/Navbar.vue';
 
 export default {
+  name: 'Register',
+  components: {
+    Navbar
+  },
   data() {
     return {
       email: '',
