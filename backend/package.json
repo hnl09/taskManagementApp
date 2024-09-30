@@ -30,11 +30,12 @@
     "class-validator": "^0.14.1",
     "firebase": "^10.13.2",
     "firebase-admin": "^12.5.0",
+    "glob": "^9.0.0",
+    "lru-cache": "^9.0.0",
     "passport-http-bearer": "^1.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "lru-cache": "^9.0.0",
-    "glob": "^9.0.0"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.4.5",
