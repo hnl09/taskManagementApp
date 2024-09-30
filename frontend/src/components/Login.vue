@@ -40,7 +40,7 @@ export default {
         this.$router.push({ path: '/'});
       } catch (error) {
         if (error.response && error.response.status === 400) {
-          this.errorMessage = 'User not found';
+          this.errorMessage = 'Check your credentials and try again.';
         } else {
           console.error('Error during login:', error);
         }

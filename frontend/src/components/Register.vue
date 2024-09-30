@@ -33,8 +33,11 @@ export default {
           password: this.password,
         });
         console.log(response.data);
+        document.cookie = `idToken=${response.data.userCredential._tokenResponse.idToken}; path=/`;
+        document.cookie = `displayName=${response.data.userCredential._tokenResponse.displayName}; path=/`;
+        this.$router.push({ path: '/'});
       } catch (error) {
-        console.error(error);
+        console.error('Error during register', error);
       }
     },
   },
