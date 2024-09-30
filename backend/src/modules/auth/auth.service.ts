@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
 import { Firebase } from "../../config/firebase.setup";
 import * as FirebaseAuth from 'firebase/auth';
-import { updateProfile, getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { updateProfile, getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { RegisterUserDto } from "./dto/register-user.dto";
 import { SigninUserDto } from "./dto/signin-user.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
@@ -46,9 +46,8 @@ export class AuthService {
                 email,
                 password,
               );
-              let idToken = await userCredential.user.getIdToken();
-          
-              return { idToken, userCredential };
+                        
+              return { userCredential };
         } catch (error) {
             throw new BadRequestException("Error loggin in", error.message);
         }
