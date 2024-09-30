@@ -1,5 +1,6 @@
 import { Injectable, OnApplicationBootstrap } from "@nestjs/common";
 import { initializeApp, FirebaseApp } from 'firebase/app';
+import { getFirestore, Firestore } from 'firebase/firestore';
 import { readFile } from "fs/promises";
 import * as admin from "firebase-admin";
 import * as path from "path";
@@ -9,6 +10,8 @@ let adminApp: admin.app.App = null;
 
 @Injectable()
 export class Firebase implements OnApplicationBootstrap {
+    private db;
+
     async onApplicationBootstrap() {
 
         if (!adminApp) {
@@ -17,6 +20,7 @@ export class Firebase implements OnApplicationBootstrap {
             const serviceAccount = JSON.parse(firebaseServiceAccountFile);
             adminApp = admin.initializeApp({
                 credential: admin.credential.cert(serviceAccount),
+                databaseURL: process.env.DATABASE_URL
             });
         }
 
@@ -31,6 +35,8 @@ export class Firebase implements OnApplicationBootstrap {
             };
             clientApp = initializeApp(clientConfig);
         }
+
+        this.db = admin.firestore()
     }
 
     client() {
@@ -39,5 +45,9 @@ export class Firebase implements OnApplicationBootstrap {
 
     admin() {
         return adminApp;
+    }
+
+    getDb() {
+      return this.db;
     }
 }

@@ -8,7 +8,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule.register({}),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -16,6 +16,6 @@ import { TasksModule } from './modules/tasks/tasks.module';
     TasksModule
   ],
   controllers: [],
-  providers: [Firebase],
+  providers: [],
 })
 export class AppModule {}
