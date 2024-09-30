@@ -36,7 +36,7 @@ export class Firebase implements OnApplicationBootstrap {
             clientApp = initializeApp(clientConfig);
         }
 
-        this.db = admin.firestore()
+        this.db = getFirestore()
     }
 
     client() {

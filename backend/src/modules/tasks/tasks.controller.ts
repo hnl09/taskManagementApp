@@ -23,13 +23,13 @@ export class TasksController {
   }
 
   @Get(':id')
-  findOne(@Headers('authorization') token: string, @Param('id') id: string) {
+  findOne(@Param('id') id: string, @Headers('authorization') token: string) {
     const splitToken = token.split(' ')[1]
-    return this.tasksService.findOne(splitToken, id);
+    return this.tasksService.findOne(id, splitToken);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto, @Headers('authorization') token: string) {
+  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto, @Headers('authorization') token: string) {
     const splitToken = token.split(' ')[1]
     return this.tasksService.update(id, splitToken, updateTaskDto);
   }
