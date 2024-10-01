@@ -43,8 +43,8 @@ export default {
           role: this.role
         });
         console.log(response.data);
-        document.cookie = `idToken=${response.data.idToken}; path=/`;
-        document.cookie = `displayName=${response.data.displayName}; path=/`;
+        localStorage.setItem('idToken', response.data.idToken);
+        localStorage.setItem('displayName', response.data.displayName);
         this.$router.push({ path: '/tasks'});
       } catch (error) {
         if (error.response && error.response.status === 400) {

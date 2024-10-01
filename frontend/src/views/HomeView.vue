@@ -18,23 +18,21 @@ export default {
     };
   },
   created() {
-    this.checkCookies();
+    this.checkLocalStorage();
   },
   methods: {
-    getCookie(name) {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
+    getLocalStorageItem(name) {
+      return localStorage.getItem(name);
     },
-    deleteCookie(name) {
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    deleteLocalStorageItem(name) {
+      localStorage.removeItem(name);
     },
-    checkCookies() {
-      this.displayName = this.getCookie('displayName');
+    checkLocalStorage() {
+      this.displayName = this.getLocalStorageItem('displayName');
     },
     logout() {
-      this.deleteCookie('displayName');
-      this.deleteCookie('idToken');
+      this.deleteLocalStorageItem('displayName');
+      this.deleteLocalStorageItem('idToken');
       this.displayName = null;
     },
   },

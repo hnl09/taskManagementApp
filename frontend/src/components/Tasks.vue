@@ -7,13 +7,39 @@
         <ul>
           <li v-for="task in tasks" :key="task.id" class="card">
             <button @click="deleteTask(task.id)" class="delete-button">Delete</button>
-            <p>Title: {{ task.title }}</p>
-            <p>Description: {{ task.description }}</p>
-            <p>Status: {{ task.status }}</p>
-            <p v-if="minutesSinceCreated(task.updatedAt) === 0">Just now</p>
-            <p v-else-if="minutesSinceCreated(task.createdAt) === 0">Just now</p>
-            <p v-else-if="task.updatedAt">{{ minutesSinceCreated(task.updatedAt) }} minutes ago</p>
-            <p v-else>{{ minutesSinceCreated(task.createdAt) }} minutes ago</p>
+            <button @click="task.isEditing = !task.isEditing" class="edit-button">
+              {{ task.isEditing ? 'Cancel' : 'Edit' }}
+            </button>
+            <div v-if="task.isEditing">
+              <form @submit.prevent="updateTask(task)">
+                <div>
+                  <label for="title">Title:</label>
+                  <input type="text" v-model="task.title" id="title" required />
+                </div>
+                <div>
+                  <label for="description">Description:</label>
+                  <textarea v-model="task.description" id="description" required></textarea>
+                </div>
+                <div>
+                  <label for="status">Status:</label>
+                  <select v-model="task.status" id="status" required>
+                    <option value="PENDING">Pending</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="DONE">Done</option>
+                  </select>
+                </div>
+                <button type="submit">Save</button>
+              </form>
+            </div>
+            <div v-else>
+              <p>Title: {{ task.title }}</p>
+              <p>Description: {{ task.description }}</p>
+              <p>Status: {{ task.status }}</p>
+              <p v-if="minutesSinceCreated(task.updatedAt) === 0">Just now</p>
+              <p v-else-if="minutesSinceCreated(task.createdAt) === 0">Just now</p>
+              <p v-else-if="task.updatedAt">{{ minutesSinceCreated(task.updatedAt) }} minutes ago</p>
+              <p v-else>{{ minutesSinceCreated(task.createdAt) }} minutes ago</p>
+            </div>
           </li>
         </ul>
       </div>
@@ -28,6 +54,14 @@
             <label for="description">Description:</label>
             <textarea v-model="newTask.description" id="description" required></textarea>
           </div>
+          <div>
+            <label for="status">Status:</label>
+            <select v-model="newTask.status" id="status" required>
+              <option value="PENDING">Pending</option>
+              <option value="IN_PROGRESS">In Progress</option>
+              <option value="DONE">Done</option>
+            </select>
+          </div>
           <button type="submit">Create Task</button>
         </form>
       </div>
@@ -37,7 +71,6 @@
 
 <script>
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import Navbar from '@/components/Navbar.vue';
 
 export default {
@@ -57,7 +90,7 @@ export default {
     };
   },
   created() {
-    this.idToken = Cookies.get('idToken');
+    this.idToken = localStorage.getItem('idToken');
     if (!this.idToken) {
       this.$router.push({ path: '/'});
     } else {
@@ -72,7 +105,7 @@ export default {
             Authorization: `Bearer ${this.idToken}`
           }
         });
-        this.tasks = response.data;
+        this.tasks = response.data.map(task => ({ ...task, isEditing: false }));
       } catch (error) {
         console.error('Error fetching tasks:', error);
       }
@@ -96,11 +129,28 @@ export default {
             Authorization: `Bearer ${this.idToken}`
           }
         });
-        this.tasks.push(response.data);
+        this.tasks.push({ ...response.data, isEditing: false });
         console.log('Task created:', response.data);
         this.newTask = { title: '', description: '', status: 'PENDING' };
       } catch (error) {
         console.error('Error creating task:', error);
+      }
+    },
+    async updateTask(task) {
+      try {
+        const response = await axios.patch(`/tasks/${task.id}`, {
+          title: task.title,
+          description: task.description,
+          status: task.status
+        }, {
+          headers: {
+            Authorization: `Bearer ${this.idToken}`
+          }
+        });
+        Object.assign(task, response.data, { isEditing: false });
+        console.log('Task updated:', response.data);
+      } catch (error) {
+        console.error('Error updating task:', error);
       }
     },
     minutesSinceCreated(timestamp) {
@@ -161,7 +211,7 @@ export default {
   margin-bottom: 16px;
 }
 
-.delete-button {
+.delete-button, .edit-button {
   position: absolute;
   top: 8px;
   right: 8px;
@@ -169,7 +219,15 @@ export default {
   border: none;
   cursor: pointer;
   font-size: 1.2em;
+}
+
+.delete-button {
   color: red;
+}
+
+.edit-button {
+  right: 60px;
+  color: blue;
 }
 
 form div {
@@ -181,7 +239,7 @@ form label {
   margin-bottom: 8px;
 }
 
-form input, form textarea {
+form input, form textarea, form select {
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
@@ -197,6 +255,6 @@ form button {
 }
 
 form button:hover {
-  background-color: #0056b3;
+  background-color: #0057b35d;
 }
 </style>

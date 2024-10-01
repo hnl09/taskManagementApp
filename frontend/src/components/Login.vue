@@ -35,8 +35,8 @@ export default {
           password: this.password,
         });
         console.log(response.data);
-        document.cookie = `idToken=${response.data.userCredential._tokenResponse.idToken}; path=/`;
-        document.cookie = `displayName=${response.data.userCredential._tokenResponse.displayName}; path=/`;
+        localStorage.setItem('idToken', response.data.userCredential._tokenResponse.idToken);
+        localStorage.setItem('displayName', response.data.userCredential._tokenResponse.displayName);
         this.$router.push({ path: '/tasks'});
       } catch (error) {
         if (error.response && error.response.status === 400) {
