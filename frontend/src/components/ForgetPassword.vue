@@ -1,8 +1,8 @@
 <template>
   <div>
     <Navbar />
-    <h2>Forget Password</h2>
-    <form @submit.prevent="forgetPassword">
+    <h2>Forgot Password</h2>
+    <form @submit.prevent="forgotPassword">
       <input v-model="email" type="email" placeholder="Email" required />
       <button type="submit">Submit</button>
     </form>
@@ -28,7 +28,7 @@ export default {
     };
   },
   methods: {
-    async forgetPassword() {
+    async forgotPassword() {
       try {
         const response = await axios.post('/auth/reset-password', {
           email: this.email,
