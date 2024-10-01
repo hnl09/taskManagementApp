@@ -37,7 +37,7 @@ export default {
         console.log(response.data);
         document.cookie = `idToken=${response.data.userCredential._tokenResponse.idToken}; path=/`;
         document.cookie = `displayName=${response.data.userCredential._tokenResponse.displayName}; path=/`;
-        this.$router.push({ path: '/'});
+        this.$router.push({ path: '/tasks'});
       } catch (error) {
         if (error.response && error.response.status === 400) {
           this.errorMessage = 'Check your credentials and try again.';

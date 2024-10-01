@@ -45,7 +45,7 @@ export default {
         console.log(response.data);
         document.cookie = `idToken=${response.data.idToken}; path=/`;
         document.cookie = `displayName=${response.data.displayName}; path=/`;
-        this.$router.push({ path: '/'});
+        this.$router.push({ path: '/tasks'});
       } catch (error) {
         if (error.response && error.response.status === 400) {
           if (error.response.data.error === 'Firebase: Error (auth/email-already-in-use).') {

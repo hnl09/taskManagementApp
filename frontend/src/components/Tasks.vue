@@ -1,5 +1,6 @@
 <template>
   <div v-if="idToken">
+    <Navbar />
     <h1>Tasks</h1>
     <ul>
       <li v-for="task in tasks" :key="task.id" class="card">
@@ -17,9 +18,13 @@
 <script>
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import Navbar from '@/components/Navbar.vue';
 
 export default {
   name: 'Tasks',
+  components: {
+    Navbar
+  },
   data() {
     return {
       tasks: [],
@@ -28,8 +33,11 @@ export default {
   },
   created() {
     this.idToken = Cookies.get('idToken');
-    console.log('idToken:', this.idToken);
-    this.fetchTasks();
+    if (!this.idToken) {
+      this.$router.push({ path: '/'});
+    } else {
+      this.fetchTasks();
+    }
   },
   methods: {
     async fetchTasks() {

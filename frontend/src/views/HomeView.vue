@@ -1,19 +1,16 @@
 <template>
   <div>
     <Navbar />
-    <Tasks />
   </div>
 </template>
 
 <script>
 import Navbar from '@/components/Navbar.vue';
-import Tasks from '@/components/Tasks.vue';
 
 export default {
   name: 'HomeView',
   components: {
-    Navbar,
-    Tasks
+    Navbar
   },
   data() {
     return {
