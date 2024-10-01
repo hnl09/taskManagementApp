@@ -9,7 +9,7 @@
       <input v-model="lastName" type="text" placeholder="Last Name" required />
       <button type="submit">Register</button>
     </form>
-    <p v-if="errorMessage">{{ errorMessage }}</p>
+    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
   </div>
 </template>
 

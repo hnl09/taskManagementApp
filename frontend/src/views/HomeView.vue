@@ -3,7 +3,7 @@
     <Navbar class="navbar" />
     <div v-if="idToken" class="container">
       <div class="left">
-        <h1>Tasks</h1>
+        <h1 class="task-title">My Tasks</h1>
         <ul>
           <li v-for="task in tasks" :key="task.id" class="card">
             <button @click="deleteTask(task.id)" class="delete-button">Delete</button>
@@ -32,9 +32,10 @@
               </form>
             </div>
             <div v-else>
-              <p>Title: {{ task.title }}</p>
-              <p>Description: {{ task.description }}</p>
-              <p>Status: {{ task.status }}</p>
+              <h2>{{ task.title }}</h2>
+              <h4>Description:</h4>
+              <p>{{ task.description }}</p>
+              <p>{{ formatStatus(task.status) }}</p>
               <p v-if="minutesSinceCreated(task.updatedAt) === 0">Just now</p>
               <p v-else-if="minutesSinceCreated(task.createdAt) === 0">Just now</p>
               <p v-else-if="task.updatedAt">{{ minutesSinceCreated(task.updatedAt) }} minutes ago</p>
@@ -88,6 +89,11 @@ export default {
         status: 'PENDING'
       }
     };
+  },
+    mounted() {
+    if (!this.idToken) {
+      this.$router.push('/login');
+    }
   },
   created() {
     this.idToken = localStorage.getItem('idToken');
@@ -163,12 +169,30 @@ export default {
       } else {
         return 'Invalid timestamp';
       }
+    },
+    formatStatus(status) {
+      switch (status) {
+        case 'PENDING':
+          return 'Pending';
+        case 'IN_PROGRESS':
+          return 'In Progress';
+        case 'DONE':
+          return 'Done';
+        default:
+          return status;
+      }
     }
   }
 };
 </script>
 
 <style scoped>
+body {
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f9;
+}
+
 .navbar {
   text-align: center;
   margin-bottom: 20px;
@@ -183,23 +207,26 @@ export default {
   width: 45%;
 }
 
+.left {
+  margin-left: 20px;
+}
+
 .card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 16px;
-  margin: 16px 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  background: white;
   position: relative;
-}
-
-.card p {
-  margin: 8px 0;
-}
-
-.card h1 {
-  font-size: 1.5em;
   margin-bottom: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .card ul {
@@ -208,6 +235,7 @@ export default {
 }
 
 .card li {
+  list-style-type: none;
   margin-bottom: 16px;
 }
 
@@ -219,15 +247,28 @@ export default {
   border: none;
   cursor: pointer;
   font-size: 1.2em;
+  transition: color 0.2s;
 }
 
 .delete-button {
-  color: red;
+  color: #ff4d4d;
+}
+
+.delete-button:hover {
+  color: #ff1a1a;
 }
 
 .edit-button {
-  right: 60px;
-  color: blue;
+  right: 80px;
+  color: #007bff;
+}
+
+.edit-button:hover {
+  color: #0056b3;
+}
+
+.task-title {
+  margin-bottom: 16px;
 }
 
 form div {
@@ -237,24 +278,28 @@ form div {
 form label {
   display: block;
   margin-bottom: 8px;
+  font-weight: bold;
 }
 
 form input, form textarea, form select {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   box-sizing: border-box;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
 }
 
 form button {
-  padding: 8px 16px;
-  background-color: #007BFF;
+  padding: 10px 20px;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 form button:hover {
-  background-color: #0057b35d;
+  background-color: #0056b3;
 }
 </style>

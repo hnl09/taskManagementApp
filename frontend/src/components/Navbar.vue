@@ -1,15 +1,16 @@
 <template>
   <div>
-    <nav>
+    <nav class="navbar">
       <router-link to="/">Home</router-link>
       <template v-if="!displayName">
         <router-link to="/login"> | Login</router-link>
         <router-link to="/register"> | Register</router-link>
-        <router-link to="/forget-password"> | Forget Password</router-link>
+        <router-link to="/forget-password"> | Forgot Password</router-link>
       </template>
-      <p v-if="displayName">Welcome, {{ displayName }}</p>
-      <p v-else>Welcome, guest! Create your account to be able to create your tasks.</p>
-      <button v-if="displayName" @click="logout">Logout</button>
+      <div class="welcome-section">
+        <p v-if="displayName">Welcome, <span>{{ displayName }}</span></p>
+        <button v-if="displayName" @click="logout">Logout</button>
+      </div>
     </nav>
   </div>
 </template>
@@ -46,4 +47,23 @@ export default {
 </script>
 
 <style scoped>
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-section {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+button {
+  margin-left: 10px;
+}
+
+span {
+  font-weight: bold;
+}
 </style>

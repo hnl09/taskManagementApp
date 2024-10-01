@@ -7,7 +7,7 @@
       <input v-model="password" type="password" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
-    <p v-if="errorMessage">{{ errorMessage }}</p>
+    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
   </div>
 </template>
 

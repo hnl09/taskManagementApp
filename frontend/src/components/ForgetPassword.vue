@@ -6,8 +6,8 @@
       <input v-model="email" type="email" placeholder="Email" required />
       <button type="submit">Submit</button>
     </form>
-    <p v-if="errorMessage">{{ errorMessage }}</p>
-    <p v-if="successMessage">{{ successMessage }}</p>
+    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+    <p v-if="successMessage" class="success">{{ successMessage }}</p>
   </div>
 </template>
 
