@@ -4,12 +4,13 @@
     <h1>Tasks</h1>
     <ul>
       <li v-for="task in tasks" :key="task.id" class="card">
-        <p>ID: {{ task.id }}</p>
-        <p>Created At: {{ formatTimestamp(task.createdAt) }}</p>
-        <p>Description: {{ task.description }}</p>
-        <p>Updated At: {{ minutesSinceCreated(task.createdAt) }} minutes ago</p>
+        <button @click="deleteTask(task.id)" class="delete-button">Delete</button>
         <p>Title: {{ task.title }}</p>
+        <p>Description: {{ task.description }}</p>
         <p>Status: {{ task.status }}</p>
+        <p v-if="minutesSinceCreated(task.updatedAt) === 0">Just now</p>
+        <p v-else-if="task.updatedAt">{{ minutesSinceCreated(task.updatedAt) }} minutes ago</p>
+        <p v-else>{{ minutesSinceCreated(task.createdAt) }} minutes ago</p>
       </li>
     </ul>
   </div>
@@ -52,12 +53,16 @@ export default {
         console.error('Error fetching tasks:', error);
       }
     },
-    formatTimestamp(timestamp) {
-      if (timestamp && timestamp.seconds !== undefined && timestamp.nanoseconds !== undefined) {
-        const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-        return date.toLocaleString();
-      } else {
-        return 'Invalid timestamp';
+    async deleteTask(taskId) {
+      try {
+        await axios.delete(`/tasks/${taskId}`, {
+          headers: {
+            Authorization: `Bearer ${this.idToken}`
+          }
+        });
+        this.tasks = this.tasks.filter(task => task.id !== taskId);
+      } catch (error) {
+        console.error('Error deleting task:', error);
       }
     },
     minutesSinceCreated(timestamp) {
@@ -83,6 +88,7 @@ export default {
   margin: 16px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+  position: relative;
 }
 
 .card p {
@@ -101,5 +107,16 @@ export default {
 
 .card li {
   margin-bottom: 16px;
+}
+
+.delete-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
+  color: red;
 }
 </style>
