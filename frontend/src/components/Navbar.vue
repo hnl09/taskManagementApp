@@ -7,9 +7,6 @@
         <router-link to="/register"> | Register</router-link>
         <router-link to="/forget-password"> | Forget Password</router-link>
       </template>
-      <template v-if="displayName">
-        <router-link to="/tasks"> | Tasks</router-link>
-      </template>
       <p v-if="displayName">Welcome, {{ displayName }}</p>
       <p v-else>Welcome, guest! Create your account to be able to create your tasks.</p>
       <button v-if="displayName" @click="logout">Logout</button>
@@ -42,7 +39,7 @@ export default {
       this.deleteLocalStorageItem('displayName');
       this.deleteLocalStorageItem('idToken');
       this.displayName = null;
-      this.$router.push({ path: '/'});
+      this.$router.push({ path: '/login'});
     },
   },
 };

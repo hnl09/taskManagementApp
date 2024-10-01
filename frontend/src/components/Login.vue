@@ -37,7 +37,7 @@ export default {
         console.log(response.data);
         localStorage.setItem('idToken', response.data.userCredential._tokenResponse.idToken);
         localStorage.setItem('displayName', response.data.userCredential._tokenResponse.displayName);
-        this.$router.push({ path: '/tasks'});
+        this.$router.push({ path: '/'});
       } catch (error) {
         if (error.response && error.response.status === 400) {
           this.errorMessage = 'Check your credentials and try again.';
