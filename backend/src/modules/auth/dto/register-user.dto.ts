@@ -1,7 +1,7 @@
 import { IsEmail, IsNotEmpty, MaxLength, MinLength, Matches, IsEnum, IsAlpha } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
-enum Permissions {
+export enum Permissions {
     ADMIN = "ADMIN",
     USER = "USER"
 }
