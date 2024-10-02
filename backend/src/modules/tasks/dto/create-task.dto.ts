@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString, Length, IsOptional, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-enum TaskStatus {
+export enum TaskStatus {
     PENDING = 'PENDING',
     IN_PROGRESS = 'IN_PROGRESS',
     DONE = 'DONE',

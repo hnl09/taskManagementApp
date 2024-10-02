@@ -42,7 +42,7 @@ describe('AuthController', () => {
         role: [Permissions.ADMIN],
       };
 
-      const result = { idToken: 'mockIdToken', displayName: 'Henrique Lopes' };
+      const result = { idToken: 'ey6as4d56as56', displayName: 'Henrique Lopes' };
       jest.spyOn(authService, 'createUser').mockResolvedValue(result);
 
       expect(await authController.signup(userRegisterRequest)).toBe(result);
@@ -57,7 +57,7 @@ describe('AuthController', () => {
         password: '12345678',
       };
 
-      const result = { userCredential: { user: { uid: '12345', email: 'henriquenl09@gmail.com' } } };
+      const result = { userCredential: { user: { uid: '4as65d4as56d65as', email: 'henriquenl09@gmail.com' } } };
       jest.spyOn(authService, 'loginUser').mockResolvedValue(result);
 
       expect(await authController.signin(userLoginRequest)).toBe(result);
