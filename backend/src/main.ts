@@ -28,7 +28,7 @@ async function bootstrap() {
     // Swagger
     const config = new DocumentBuilder()
     .setTitle('Tasks Api')
-    .setDescription('Api to Authenticate and manage tasks on firebase')
+    .setDescription('Api to authenticate users and manage tasks on firebase')
     .setVersion('1.0')
     .build();
     const document = SwaggerModule.createDocument(app, config);
