@@ -112,13 +112,22 @@ export class TasksService {
     try {
       const decodedToken = await admin.auth().verifyIdToken(token);
       const userId = decodedToken.uid;
-
+  
       const colRef = await this.getCollectionReference(userId);
       const docRef = doc(colRef, id);
-      await deleteDoc(docRef);
+      const docSnap = await getDoc(docRef);
 
-      return { id: id, message: 'Task deleted successfully' };
+      if (!docSnap.exists()) {
+        throw new HttpException('Task not found', HttpStatus.NOT_FOUND);
+      }
+      
+      await deleteDoc(docRef);
+  
+      throw new HttpException(null, HttpStatus.NO_CONTENT);
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new HttpException('Failed to delete task', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
