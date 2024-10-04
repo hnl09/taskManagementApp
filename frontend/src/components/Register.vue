@@ -9,6 +9,7 @@
       <input v-model="lastName" type="text" placeholder="Last Name" required />
       <button type="submit">Register</button>
     </form>
+    <p v-if="loading" class="loading">Loading...</p>
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
   </div>
 </template>
@@ -29,11 +30,13 @@ export default {
       firstName: '',
       lastName: '',
       role: 'USER',
-      errorMessage: ''
+      errorMessage: '',
+      loading: false,
     };
   },
   methods: {
     async register() {
+      this.loading = true;
       try {
         const response = await axios.post('/auth/signup', {
           email: this.email,
@@ -57,6 +60,8 @@ export default {
         } else {
           console.error('Error during login:', error);
         }
+      } finally {
+        this.loading = false;
       }
     },
   },

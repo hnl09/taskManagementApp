@@ -7,6 +7,7 @@
       <input v-model="password" type="password" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
+    <p v-if="loading" class="loading">Loading...</p>
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
   </div>
 </template>
@@ -25,10 +26,12 @@ export default {
       email: '',
       password: '',
       errorMessage: '',
+      loading: false,
     };
   },
   methods: {
     async login() {
+      this.loading = true;
       try {
         const response = await axios.post('/auth/signin', {
           email: this.email,
@@ -44,6 +47,8 @@ export default {
         } else {
           console.error('Error during login:', error);
         }
+      } finally {
+        this.loading = false;
       }
     },
   },
