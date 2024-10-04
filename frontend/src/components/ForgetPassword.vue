@@ -6,6 +6,7 @@
       <input v-model="email" type="email" placeholder="Email" required />
       <button type="submit">Submit</button>
     </form>
+    <p v-if="loading" class="loading">Loading...</p>
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     <p v-if="successMessage" class="success">{{ successMessage }}</p>
   </div>
@@ -25,10 +26,12 @@ export default {
       email: '',
       errorMessage: '',
       successMessage: '',
+      loading: false,
     };
   },
   methods: {
     async forgotPassword() {
+      this.loading = true;
       try {
         const response = await axios.post('/auth/reset-password', {
           email: this.email,
@@ -44,6 +47,8 @@ export default {
           console.error('Error reseting password:', error);
         }
         console.log(this.errorMessage);
+      } finally {
+        this.loading = false;
       }
     },
   },
